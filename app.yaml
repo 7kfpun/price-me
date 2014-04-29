@@ -1,0 +1,19 @@
+application: price-me
+version: dev
+runtime: python27
+threadsafe: true
+api_version: 1
+
+handlers:
+- url: /.*
+  script: price-me.views.application
+
+libraries:
+- name: pycrypto
+  version: latest
+- name: endpoints
+  version: 1.0
+- name: jinja2
+  version: latest
+- name: webapp2
+  version: latest
