@@ -54,11 +54,12 @@ class MainPage(webapp2.RequestHandler):
             response = requests.get(
                 u'http://s.taobao.com/search?q={}'.format(search))
             if response.status_code == 200:
-                soup = BeautifulSoup(response.text)
-                #print soup.prettify
-                self.response.write('<br /><br />')
+                soup = BeautifulSoup(
+                    response.content.decode('gbk').encode('utf8'))
+                print soup.prettify
+                #self.response.write('<br /><br />')
                 self.response.write(
-                    [div for div in soup.find_all('div')])
+                    [div for div in soup.find_all("div", class_="price")])
 
 
 application = webapp2.WSGIApplication([
