@@ -1,9 +1,20 @@
 <html>
-<table>
-  Hellooooo!
-</table>
-
 <form name="input" action="/" method="post">
   <input type="text" name="search" value="{{search}}">
   <input type="submit" value="Submit">
 </form>
+
+{% if average_price %}
+average price: {{average_price}}
+average price (per unit): {{average_price_per_unit}} / {{unit}}
+{% endif %}
+<br /><br />
+<table>
+  {% for h3, price, price_per_unit in stat %}
+  <tr>
+      <td>{{h3}}</td>
+      <td>{{price}}</td>
+      <td>{{price_per_unit}} / {{unit}}</td>
+  </tr>
+  {% endfor %}
+</table>

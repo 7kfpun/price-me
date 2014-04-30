@@ -4,11 +4,11 @@ reload(sys)
 sys.path.insert(0, 'libs')
 sys.setdefaultencoding("utf-8")
 
-from bs4 import BeautifulSoup
+from taobao import Taobao
+from utils import avg
 import jinja2
 import logging
 import os
-import requests
 import webapp2
 
 
@@ -46,21 +46,23 @@ class MainPage(webapp2.RequestHandler):
         self.response.write('<br /><br />')
         self.response.write(search)
         template = JINJA_ENVIRONMENT.get_template('hello.html')
-        rendered_page = template.render(search=search)
 
+        taobao = Taobao(search)
+        #self.response.write(taobao.get_all_h3())
+        #self.response.write(taobao.get_all_prices())
+        #self.response.write(taobao.get_all_price_per_units())
+        #self.response.write(taobao.get_unit())
+        logger.info(taobao.get_all())
+
+        rendered_page = template.render(
+            search=search,
+            average_price=avg(taobao.get_all_prices()),
+            average_price_per_unit=avg(taobao.get_all_price_per_units())
+            if taobao.has_unit() else 0,
+            stat=taobao.get_all(),
+            unit=taobao.get_unit(),
+        )
         self.response.write(rendered_page)
-
-        if search:
-            response = requests.get(
-                u'http://s.taobao.com/search?q={}'.format(search))
-            if response.status_code == 200:
-                soup = BeautifulSoup(
-                    response.content.decode('gbk').encode('utf8'))
-                print soup.prettify
-                #self.response.write('<br /><br />')
-                self.response.write(
-                    [div for div in soup.find_all("div", class_="price")])
-
 
 application = webapp2.WSGIApplication([
     ('/', MainPage),
