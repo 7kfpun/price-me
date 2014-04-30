@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import re
 
@@ -24,7 +25,7 @@ def pie(list_, groups=5):
         return {}
     max_ = max(list_)
     min_ = min(list_)
-    step = (max_ - min_) / groups
+    step = float(max_ - min_) / groups
     return {
         '{} - {}'.format(min_ + i * step, min_ + (i + 1) * step): [
             data for data in sorted(list_)

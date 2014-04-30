@@ -15,7 +15,7 @@ help:
 # target: t - Run tests
 .PHONY: t
 t: clean
-	nosetests -v --with-gae --gae-lib-root=$(GAE)
+	nosetests -v --with-gae --gae-lib-root=$(GAE) --gae-application=./ --where=./core/tests
 
 # target: run - Run application server
 .PHONY: run
