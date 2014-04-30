@@ -5,7 +5,7 @@ sys.path.insert(0, 'libs')
 sys.setdefaultencoding("utf-8")
 
 from taobao import Taobao
-from utils import avg
+from utils import avg, pie
 import jinja2
 import logging
 import os
@@ -30,7 +30,6 @@ class MainPage(webapp2.RequestHandler):
 
     def get(self):
         self.response.headers['Content-Type'] = 'text/html; charset=UTF-8'
-        self.response.write('Hello, World!')
 
         template = JINJA_ENVIRONMENT.get_template('hello.html')
         rendered_page = template.render()
@@ -39,7 +38,6 @@ class MainPage(webapp2.RequestHandler):
 
     def post(self):
         self.response.headers['Content-Type'] = 'text/html; charset=UTF-8'
-        self.response.write('Hello, World!')
 
         search = self.request.get("search")
         logger.info(search)
@@ -52,7 +50,8 @@ class MainPage(webapp2.RequestHandler):
         #self.response.write(taobao.get_all_prices())
         #self.response.write(taobao.get_all_price_per_units())
         #self.response.write(taobao.get_unit())
-        logger.info(taobao.get_all())
+        #logger.info(taobao.get_all())
+        logger.info(pie(taobao.get_all_prices()))
 
         rendered_page = template.render(
             search=search,
@@ -61,6 +60,8 @@ class MainPage(webapp2.RequestHandler):
             if taobao.has_unit() else 0,
             stat=taobao.get_all(),
             unit=taobao.get_unit(),
+            all_prices_pie=pie(taobao.get_all_prices(), 10),
+            all_price_per_units_pie=pie(taobao.get_all_price_per_units(), 10),
         )
         self.response.write(rendered_page)
 
