@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import unittest
 import requests_cache
+import unittest
 
 from core.taobao import Taobao
 

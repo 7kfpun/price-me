@@ -1,6 +1,6 @@
 <html>
 <h3>taobao</h3>
-<form name="input" action="/" method="post">
+<form name="input" action="/" method="get">
   <input type="text" name="search" value="{{search}}">
   <input type="submit" value="Submit">
 </form>
@@ -16,18 +16,6 @@ average price (per unit): {{average_price_per_unit}} / {{unit}}
 <div id="all_price_per_units_pie"></div>
 
 <div id='table_div'></div>
-
-{#  
-<table>
-  {% for h3, price, price_per_unit in stat %}
-  <tr>
-      <td>{{h3}}</td>
-      <td>{{price}}</td>
-      <td>{{price_per_unit}} / {{unit}}</td>
-  </tr>
-  {% endfor %}
-</table>
-#}
 
 <script type="text/javascript" src="//www.google.com/jsapi"></script>
 <script type="text/javascript">
@@ -76,7 +64,7 @@ average price (per unit): {{average_price_per_unit}} / {{unit}}
     data.addColumn('number', 'price_per_unit');
     data.addRows([
       {% for h3, price, price_per_unit in stat %}
-        ["{{h3|safe}}", {{price|safe}}, {v: {{price_per_unit|safe}}, f: "{{price_per_unit|safe}} / {{unit|safe}}"}],
+        ["{{h3|safe}}", {{price|safe}}, {v: {{price_per_unit or 0|safe}}, f: "{{price_per_unit or 0|safe}} / {{unit|safe}}"}],
       {% endfor %}
     ]);
 

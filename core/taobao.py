@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from bs4 import BeautifulSoup
-import requests
 import logging
+import requests
 
 
 logger = logging.getLogger(__name__)
@@ -17,6 +17,9 @@ class Taobao:
 
         if self.response.status_code == 200:
             self.soup = BeautifulSoup(self.response.text, from_encoding='utf8')
+
+    def get_length(self):
+        return len(self.get_all_h3())
 
     def get_all_h3(self):
         return [
@@ -48,7 +51,7 @@ class Taobao:
     def get_all(self):
         price_per_units = self.get_all_price_per_units() \
             if self.get_all_price_per_units() \
-            else [None] * len(self.get_all_h3())
+            else [None] * self.get_length()
 
         return zip(
             self.get_all_h3(),
