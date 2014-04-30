@@ -9,6 +9,14 @@ average price: {{average_price}}
 average price (per unit): {{average_price_per_unit}} / {{unit}}
 {% endif %}
 <br /><br />
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<div id="all_prices_pie"></div>
+<div id="all_price_per_units_pie"></div>
+
+<div id='table_div'></div>
+
+{#  
 <table>
   {% for h3, price, price_per_unit in stat %}
   <tr>
@@ -18,3 +26,60 @@ average price (per unit): {{average_price_per_unit}} / {{unit}}
   </tr>
   {% endfor %}
 </table>
+#}
+
+<script type="text/javascript" src="//www.google.com/jsapi"></script>
+<script type="text/javascript">
+  google.load('visualization', '1', {packages: ['imagepiechart', 'table']});
+</script>
+<script type="text/javascript">
+  {% if all_prices_pie %}
+  function all_prices_pie() {
+    // Create and populate the data table.
+    var data = google.visualization.arrayToDataTable([
+      ['Price range', 'Yuan'],
+      {% for key, value in all_prices_pie.iteritems() %}
+        ['{{ key | safe }} (' + {{ value|length|safe }} + ')', {{ value|length|safe}}],
+      {% endfor %}
+    ]);
+  
+    // Create and draw the visualization.
+    new google.visualization.ImagePieChart(document.getElementById('all_prices_pie')).
+        draw(data, {title: 'all_prices_pie'});
+  }
+  google.setOnLoadCallback(all_prices_pie);
+  {% endif %}
+
+  {% if all_price_per_units_pie %}
+  function all_price_per_units_pie() {
+    // Create and populate the data table.
+    var data = google.visualization.arrayToDataTable([
+      ['Price range', 'Yuan'],
+      {% for key, value in all_price_per_units_pie.iteritems() %}
+        ['{{ key | safe }} (' + {{ value|length|safe }} + ')', {{ value|length|safe }}],
+      {% endfor %}
+    ]);
+  
+    // Create and draw the visualization.
+    new google.visualization.ImagePieChart(document.getElementById('all_price_per_units_pie')).
+        draw(data, {title: 'all_price_per_units_pie'});
+  }
+  google.setOnLoadCallback(all_price_per_units_pie);
+  {% endif %}
+
+  google.setOnLoadCallback(drawTable);
+  function drawTable() {
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'title');
+    data.addColumn('number', 'price');
+    data.addColumn('number', 'price_per_unit');
+    data.addRows([
+      {% for h3, price, price_per_unit in stat %}
+        ["{{h3|safe}}", {{price|safe}}, {v: {{price_per_unit|safe}}, f: "{{price_per_unit|safe}} / {{unit|safe}}"}],
+      {% endfor %}
+    ]);
+
+    var table = new google.visualization.Table(document.getElementById('table_div'));
+    table.draw(data, {showRowNumber: true});
+  }
+</script>

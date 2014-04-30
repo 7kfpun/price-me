@@ -17,3 +17,17 @@ def is_url(url):
 
 def avg(list_):
     return float(sum(list_)) / len(list_) if len(list_) > 0 else float('nan')
+
+
+def pie(list_, groups=5):
+    if not list_:
+        return {}
+    max_ = max(list_)
+    min_ = min(list_)
+    step = (max_ - min_) / groups
+    return {
+        '{} - {}'.format(min_ + i * step, min_ + (i + 1) * step): [
+            data for data in sorted(list_)
+            if i * step <= data - min_ <= (i + 1) * step]
+        for i in range(groups)
+    }

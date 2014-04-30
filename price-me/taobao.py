@@ -20,7 +20,7 @@ class Taobao:
 
     def get_all_h3(self):
         return [
-            element.get_text() for element
+            element.get_text().strip() for element
             in self.soup.find_all("h3", {"class": "summary"})
         ]
 
