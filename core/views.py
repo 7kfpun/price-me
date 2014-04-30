@@ -31,7 +31,7 @@ class MainPage(webapp2.RequestHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/html; charset=UTF-8'
 
-        template = JINJA_ENVIRONMENT.get_template('hello.html')
+        template = JINJA_ENVIRONMENT.get_template('index.html')
         rendered_page = template.render()
 
         self.response.write(rendered_page)
